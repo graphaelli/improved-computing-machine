@@ -67,7 +67,7 @@ jobs:
           API_KEY: ${{ secrets.single_existing_project_api_key }}
           OTLP_ENDPOINT: ${{ secrets.single_existing_project_ingest_url }}
         run: |
-          ./single-new-project/generate-collector-config.sh > config.yaml
+          ./confgen/generate-collector-config.sh > config.yaml
           echo ${{ secrets.ENCRYPTION_KEY }} | gpg --pinentry-mode loopback --passphrase-fd 0 -c -o config.yaml.gpg config.yaml
 
       - name: Upload Collector Config

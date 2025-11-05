@@ -148,7 +148,7 @@ jobs:
           API_KEY: ${{ steps.load-api-key.outputs.api_key }}
           OTLP_ENDPOINT: ${{ needs.launch-project.outputs.ingest_url }}:443
         run: |
-          ./single-new-project/generate-collector-config.sh > config.yaml
+          ./confgen/generate-collector-config.sh > config.yaml
           echo ${{ secrets.ENCRYPTION_KEY }} | gpg --pinentry-mode loopback --passphrase-fd 0 -c -o config.yaml.gpg config.yaml
 
       - name: Upload Collector Config
