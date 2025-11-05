@@ -47,21 +47,25 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Initialize Terraform
+        working-directory: single-new-project
         run: terraform init
 
       - name: Set Terraform Input
+        working-directory: single-new-project
         run: |
           cat > terraform.tfvars << EOF
           region_id = "${{ inputs.region_id }}"
           EOF
 
       - name: Apply Terraform
+        working-directory: single-new-project
         run: terraform apply -auto-approve
         env:
           EC_API_KEY: ${{ secrets.EC_API_KEY }}
 
       - name: Save Project Information
         id: save-project-information
+        working-directory: single-new-project
         run: |
           apikey=$(terraform output --json api_key | jq -r .encoded)
           echo "::add-mask::$apikey"
@@ -76,9 +80,9 @@ jobs:
         with:
           name: terraform-state
           path: |
-            .terraform
-            terraform.tfstate
-            terraform.tfstate.backup
+            single-new-project/.terraform
+            single-new-project/terraform.tfstate
+            single-new-project/terraform.tfstate.backup
           include-hidden-files: true
 
   determine-parallelism:
@@ -147,7 +151,9 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
+
       - name: Initialize Terraform
+        working-directory: single-new-project
         run: terraform init
 
       - name: Download Terraform State
@@ -157,6 +163,7 @@ jobs:
 
       - name: Destroy Terraform
         if: always()
+        working-directory: single-new-project
         run: terraform destroy -auto-approve
         env:
           EC_API_KEY: ${{ secrets.EC_API_KEY }}
