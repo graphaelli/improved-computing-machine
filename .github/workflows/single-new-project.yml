@@ -152,6 +152,7 @@ jobs:
     name: Run Collectors
     needs:
       - configure-collector
+      - determine-parallelism
     uses: graphaelli/improved-computing-machine/.github/workflows/load.yml@main
     with:
       collector_configuration: ${{ needs.configure-collector.outputs.collector_config }}
