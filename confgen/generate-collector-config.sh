@@ -134,8 +134,8 @@ else
             exporter:
               otlp:
                 protocol: http/protobuf
-              endpoint: ${MONITORING_OTLP_ENDPOINT}
-              headers:
-                authorization: ApiKey ${MONITORING_API_KEY}
+                endpoint: ${MONITORING_OTLP_ENDPOINT}
+                headers:
+                  authorization: ApiKey ${MONITORING_API_KEY}
 EOF
 fi
