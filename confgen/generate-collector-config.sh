@@ -83,6 +83,9 @@ receivers:
       processes:
 
 processors:
+  transform/selfmon:
+    metric_statements:
+      - set(resource.attributes["host.name"], "loadcol-\${env:ITERATION}-\${env:INSTANCE}")
   attributes/first:
     actions:
       - key: instance
@@ -176,7 +179,7 @@ service:
   pipelines:
     metrics/selfmon:
       receivers: [hostmetrics/selfmon]
-      processors: [resourcedetection,batch]
+      processors: [resourcedetection,transform/selfmon,batch]
       exporters: [otlp/selfmon]
 EOF
 
