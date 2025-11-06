@@ -5,8 +5,8 @@ if [ -z "${OTLP_ENDPOINT}" ]; then
   exit 1
 fi
 
-if [ -z "${API_KEY}" ]; then
-  echo "expected API_KEY"
+if [ -z "${OTLP_API_KEY}" ]; then
+  echo "expected OTLP_API_KEY"
   exit 1
 fi
 
@@ -72,29 +72,62 @@ processors:
           enabled: true
 
 exporters:
+EOF
+
+if [ -n "${OTLP_ENDPOINT}" ]; then
+cat << EOF
   otlp:
     endpoint: ${OTLP_ENDPOINT}
     headers:
-      authorization: ApiKey ${API_KEY}
+      authorization: ApiKey ${OTLP_API_KEY}
+EOF
+fi
+
+if [ -n "${ELASTICSEARCH_ENDPOINT}" ]; then
+cat << EOF
+  elasticsearch:
+    endpoint: ${ELASTICSEARCH_ENDPOINT}
+    api_key: ${ELASTICSEARCH_API_KEY}
+EOF
+fi
+
+cat << EOF
 
 service:
   pipelines:
+EOF
+
+if [ -n "${OTLP_ENDPOINT}" ]; then
+cat << EOF
     metrics/otlp:
       receivers: [hostmetrics]
       processors: [attributes,resourcedetection,batch]
       exporters: [otlp]
-  telemetry:
-    logs:
-      level: warn
 EOF
+fi
+
+if [ -n "${ELASTICSEARCH_ENDPOINT}" ]; then
+cat << EOF
+    metrics/elasticsearch:
+      receivers: [hostmetrics]
+      processors: [attributes,resourcedetection]
+      exporters: [elasticsearch]
+EOF
+fi
 
 if [ -z "${MONITORING_OTLP_ENDPOINT}" ] || [ -z "${MONITORING_API_KEY}" ]; then
   cat << EOF
+  telemetry:
+    logs:
+      level: warn
     metrics:
       level: none
 EOF
 else
   cat << EOF
+  telemetry:
+    logs:
+      level: warn
     metrics:
       readers:
         - periodic:

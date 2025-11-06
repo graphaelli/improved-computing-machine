@@ -64,7 +64,7 @@ jobs:
       - name: Generate Config
         id: generate-config
         env:
-          API_KEY: ${{ secrets.single_existing_project_api_key }}
+          OTLP_API_KEY: ${{ secrets.single_existing_project_api_key }}
           OTLP_ENDPOINT: ${{ secrets.single_existing_project_ingest_url }}
           MONITORING_OTLP_ENDPOINT: ${{ secrets.global_monitoring_otlp_url }}
           MONITORING_API_KEY: ${{ secrets.global_monitoring_api_key }}

@@ -145,7 +145,7 @@ jobs:
       - name: Generate Config
         id: generate-config
         env:
-          API_KEY: ${{ steps.load-api-key.outputs.api_key }}
+          OTLP_API_KEY: ${{ steps.load-api-key.outputs.api_key }}
           OTLP_ENDPOINT: ${{ needs.launch-project.outputs.ingest_url }}:443
           MONITORING_OTLP_ENDPOINT: ${{ secrets.global_monitoring_otlp_url }}
           MONITORING_API_KEY: ${{ secrets.global_monitoring_api_key }}
