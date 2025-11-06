@@ -1,12 +1,12 @@
 #!/bin/bash -e
 
-if [ -z "${OTLP_ENDPOINT}" ]; then
-  echo "expected OTLP_ENDPOINT"
+if [ -z "${OTLP_ENDPOINT}" ] && [ -z "${ELASTICSEARCH_ENDPOINT}" ]; then
+  echo "expected OTLP_ENDPOINT or ELASTICSEARCH_ENDPOINT"
   exit 1
 fi
 
-if [ -z "${OTLP_API_KEY}" ]; then
-  echo "expected OTLP_API_KEY"
+if [ -z "${OTLP_API_KEY}" ] && [ -z "${ELASTICSEARCH_API_KEY}" ]; then
+  echo "expected OTLP_API_KEY or ELASTICSEARCH_API_KEY"
   exit 1
 fi
 

@@ -27,6 +27,14 @@ on:
           required: false
           default: '0.138.0'
           type: string
+        output_type:
+          description: 'Output type for the collector (otlp or elasticsearch)'
+          required: false
+          default: 'otlp'
+          type: choice
+          options:
+            - otlp
+            - elasticsearch
 
 jobs:
   determine-parallelism:
@@ -64,8 +72,10 @@ jobs:
       - name: Generate Config
         id: generate-config
         env:
-          OTLP_API_KEY: ${{ secrets.single_existing_project_api_key }}
-          OTLP_ENDPOINT: ${{ secrets.single_existing_project_ingest_url }}
+          OTLP_API_KEY: ${{ inputs.output_type == 'otlp' && secrets.single_existing_project_api_key || '' }}
+          OTLP_ENDPOINT: ${{ inputs.output_type == 'otlp' && secrets.single_existing_project_ingest_url || '' }}
+          ELASTICSEARCH_API_KEY: ${{ inputs.output_type == 'elasticsearch' && secrets.single_existing_project_api_key || '' }}
+          ELASTICSEARCH_ENDPOINT: ${{ inputs.output_type == 'elasticsearch' && secrets.single_existing_project_ingest_url || '' }}
           MONITORING_OTLP_ENDPOINT: ${{ secrets.global_monitoring_otlp_url }}
           MONITORING_API_KEY: ${{ secrets.global_monitoring_api_key }}
         run: |

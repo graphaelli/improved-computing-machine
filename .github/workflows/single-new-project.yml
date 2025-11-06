@@ -32,6 +32,14 @@ on:
           required: false
           default: '0.138.0'
           type: string
+        output_type:
+          description: 'Output type for the collector (otlp or elasticsearch)'
+          required: false
+          default: 'otlp'
+          type: choice
+          options:
+            - otlp
+            - elasticsearch
 
 jobs:
   launch-project:
@@ -145,8 +153,10 @@ jobs:
       - name: Generate Config
         id: generate-config
         env:
-          OTLP_API_KEY: ${{ steps.load-api-key.outputs.api_key }}
-          OTLP_ENDPOINT: ${{ needs.launch-project.outputs.ingest_url }}:443
+          OTLP_API_KEY: ${{ inputs.output_type == 'otlp' && steps.load-api-key.outputs.api_key || '' }}
+          OTLP_ENDPOINT: ${{ inputs.output_type == 'otlp' && format('{0}:443', needs.launch-project.outputs.ingest_url) || '' }}
+          ELASTICSEARCH_API_KEY: ${{ inputs.output_type == 'elasticsearch' && steps.load-api-key.outputs.api_key || '' }}
+          ELASTICSEARCH_ENDPOINT: ${{ inputs.output_type == 'elasticsearch' && format('{0}:443', needs.launch-project.outputs.ingest_url) || '' }}
           MONITORING_OTLP_ENDPOINT: ${{ secrets.global_monitoring_otlp_url }}
           MONITORING_API_KEY: ${{ secrets.global_monitoring_api_key }}
         run: |
