@@ -154,10 +154,10 @@ jobs:
         id: generate-config
         env:
           OTLP_API_KEY: ${{ inputs.output_type == 'otlp' && steps.load-api-key.outputs.api_key || '' }}
-          OTLP_ENDPOINT: ${{ inputs.output_type == 'otlp' && format('{0}:443', needs.launch-project.outputs.ingest_url) || '' }}
+          OTLP_ENDPOINT: ${{ inputs.output_type == 'otlp' && format('{0}:443', needs.launch-project.outputs.ingest_endpoint) || '' }}
           ELASTICSEARCH_API_KEY: ${{ inputs.output_type == 'elasticsearch' && steps.load-api-key.outputs.api_key || '' }}
-          ELASTICSEARCH_ENDPOINT: ${{ inputs.output_type == 'elasticsearch' && format('{0}:443', needs.launch-project.outputs.ingest_url) || '' }}
-          MONITORING_OTLP_ENDPOINT: ${{ secrets.global_monitoring_otlp_url }}
+          ELASTICSEARCH_ENDPOINT: ${{ inputs.output_type == 'elasticsearch' && format('{0}:443', needs.launch-project.outputs.ingest_endpoint) || '' }}
+          MONITORING_OTLP_ENDPOINT: ${{ secrets.global_monitoring_otlp_endpoint }}
           MONITORING_API_KEY: ${{ secrets.global_monitoring_api_key }}
         run: |
           ./confgen/generate-collector-config.sh > config.yaml
