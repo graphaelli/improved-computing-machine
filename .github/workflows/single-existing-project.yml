@@ -32,6 +32,22 @@ on:
         required: false
         default: 'otlp'
         type: string
+    secrets:
+      ENCRYPTION_KEY:
+        required: true
+        description: 'Encryption key for GPG decryption'
+      single_existing_project_es_api_key:
+        required: true
+        description: 'API key for the existing Elastic Cloud observability project'
+      single_existing_project_es_endpoint:
+        required: true
+        description: 'Elasticsearch endpoint URL for the existing project'
+      global_monitoring_otlp_endpoint:
+        required: false
+        description: 'OTLP endpoint URL for monitoring telemetry from the OpenTelemetry collectors'
+      global_monitoring_api_key:
+        required: false
+        description: 'API key for the monitoring OTLP endpoint'
 
   workflow_dispatch:
     inputs:
