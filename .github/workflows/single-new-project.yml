@@ -5,12 +5,12 @@ on:
       duration:
         description: 'Duration for each collector instance to run'
         required: false
-        default: '1m'
+        default: '2h'
         type: string
       delay_start:
         description: 'Maximum delay in seconds before starting each collector'
         required: false
-        default: '10'
+        default: '300'
         type: string
       numprocs:
         description: 'Number of collector instances to run'
@@ -20,12 +20,12 @@ on:
       parallelism:
         description: 'Number of parallel jobs to run'
         required: false
-        default: 3
+        default: 20
         type: number
       num_instances:
         description: 'Number of collector instances per configuration (otlp/1, otlp/2, etc.)'
         required: false
-        default: '3'
+        default: '10'
         type: string
       region_id:
         description: 'Region ID for the observability project'
