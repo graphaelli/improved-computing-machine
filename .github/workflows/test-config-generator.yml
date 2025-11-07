@@ -1,0 +1,39 @@
+name: Test Config Generator
+
+on:
+  push:
+    paths:
+      - 'confgen/collector-config.yaml.j2'
+      - 'confgen/generate-collector-config.py'
+      - 'confgen/test_generate_collector_config.py'
+      - 'confgen/requirements.txt'
+  pull_request:
+    paths:
+      - 'confgen/collector-config.yaml.j2'
+      - 'confgen/generate-collector-config.py'
+      - 'confgen/test_generate_collector_config.py'
+      - 'confgen/requirements.txt'
+
+jobs:
+  test:
+    name: Run Config Generator Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r confgen/requirements.txt
+
+      - name: Run tests
+        run: |
+          pytest confgen/test_generate_collector_config.py -v
+
